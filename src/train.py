@@ -49,7 +49,7 @@ with mlflow.start_run() as run:
         ('vectorizer', vectorizer),
         ('classifier', LogisticRegression(max_iter=1000))
     ])
- 
+
     pipe.named_steps['classifier'].fit(X_resampled, y_resampled)
 
     y_pred = pipe.named_steps['classifier'].predict(X_test_vec)
@@ -63,4 +63,7 @@ with mlflow.start_run() as run:
 
     with open("latest_run.txt", "w") as f:
         f.write(run_id)
-        
+
+    import joblib, os
+    os.makedirs("models", exist_ok=True)
+    joblib.dump(pipe, "models/sentiment_model.pkl")
